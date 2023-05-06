@@ -1,4 +1,3 @@
-import './HeroSection.css';
 import graphic from './../assets/graphic.png';
 import dogPic from './../assets/dogPic.png';
 

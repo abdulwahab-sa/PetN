@@ -5,10 +5,12 @@ export default {
 		extend: {
 			height: {
 				hero: '640px',
+				nav: '214px',
 			},
 			backgroundColor: {
 				hero: '#DF9C86',
 				darkBlue: '#0054B4',
+				lightBlue: '#437EF7',
 			},
 			textColor: {
 				darkGrey: '#272D37',

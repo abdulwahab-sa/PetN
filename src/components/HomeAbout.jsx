@@ -30,7 +30,7 @@ const HomeAbout = () => {
 					Whether it’s a sneaky escape or a stroll with your dogwalker, you can now track your pet at any given time to ease your mind.{' '}
 				</p>
 			</div>
-			<div className="flex flex-col space-y-8">
+			<div className="flex flex-col space-y-10">
 				{ideas.map((idea) => (
 					<div className="flex space-x-3" key={idea.id}>
 						<img src={idea.icon} alt="" className="w-12 h-12" />

@@ -28,4 +28,19 @@ body {
 .aboutpara{
   width: 450px;
 }
+
+.footerheading{
+  width: 400px;
+
+}
+
+
+.graphic{
+  width: 448px;
+  height: 560px;
+}
+
+.dog{
+  height: 500px;
+}
 }
