@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import rockyImg from '../assets/rockyImg.png';
 import camIcon from '../assets/camIcon.png';
 
@@ -39,10 +40,16 @@ const inputs = [
 	},
 ];
 
-const PetAccount = () => {
+const PetAccount = ({ openSidebar, setOpenSidebar }) => {
 	return (
-		<div className="py-40 px-14 ">
-			<div className="relative w-full mx-auto pet-form-wrapper flex items-center justify-center">
+		<div className="md:py-40 py-8 px-4 md:px-14 flex flex-col space-y-8 w-full ">
+			<button
+				onClick={() => setOpenSidebar(!openSidebar)}
+				className=" md:hidden mb-20 w-20 mx-auto bg-lightBlue p-2 rounded-md  font-semibold text-white"
+			>
+				Menu
+			</button>
+			<div className="relative w-full mx-auto pet-form-wrapper md:pet-form-wrapper-md flex items-center justify-center">
 				<div className=" absolute -top-20  z-20">
 					<div className="relative">
 						<img src={rockyImg} alt="" className="w-44 h-44 rounded-full" />
@@ -52,10 +59,12 @@ const PetAccount = () => {
 					</div>
 				</div>
 
-				<div className="flex flex-wrap item-center justify-center">
+				<div className="flex flex-col mt-28 md:mt-0 md:flex-row flex-wrap item-center justify-center">
 					{inputs.map((el) => (
 						<div
-							className={`flex flex-col space-y-2 max-w-2xl m-2 ${el.title === 'Last Pinned Location' ? 'w-full' : 'w-2/5'}`}
+							className={`flex flex-col w-full md:w-2/5 space-y-2 max-w-2xl m-2 ${
+								el.title === 'Last Pinned Location' ? 'md:w-full' : 'md:w-2/5'
+							}`}
 							key={el.id}
 						>
 							<span className="text-lg font-medium text-darkBlue">{el.title}</span>

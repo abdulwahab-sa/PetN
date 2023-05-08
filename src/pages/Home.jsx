@@ -3,13 +3,13 @@ import HeroSection from '../components/HeroSection';
 import HomeAbout from '../components/HomeAbout';
 import Navigation from '../components/Navigation';
 import Account from './Account';
+import Login from './Login';
 
 const Home = () => {
 	return (
 		<>
 			<Navigation />
-			<Account />
-
+			<Login />
 			<Footer />
 		</>
 	);

@@ -1,6 +1,9 @@
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import userIcon from '../assets/userIcon.png';
 import messageIcon from '../assets/messageIcon.png';
 import settingIcon from '../assets/settingIcon.png';
+import { MdCancelPresentation } from 'react-icons/md';
 
 const navLinks = [
 	{
@@ -25,13 +28,22 @@ const navLinks = [
 	},
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ openSidebar, setOpenSidebar }) => {
+	const [menuToggle, setMenuToggle] = useState(true);
+
 	return (
-		<div className="sidebar  bg-darkBlue p-28 flex flex-col items-center space-y-2">
+		<div
+			className={`absolute ${
+				openSidebar ? 'left-0' : '-left-full'
+			}  top-40 h-64 w-full justify-center md:justify-normal md:sidebar bg-darkBlue shadow-xl md:shadow-none p-4 md:p-28 flex flex-col items-center space-y-4 md:space-y-2 z-50 md:static  transition-all`}
+		>
+			<span onClick={() => setOpenSidebar(!openSidebar)} className="md:hidden text-white text-3xl absolute right-4 top-0">
+				{<MdCancelPresentation />}
+			</span>
 			{navLinks.map((link) => (
 				<div
 					key={link.id}
-					className={` cursor-pointer relative flex items-center space-x-4 px-3 h-9 w-60 rounded ${
+					className={` cursor-pointer relative flex items-center space-x-4 px-3 h-9 w-4/5 md:w-60  rounded ${
 						link.title === 'My Pets' ? 'bg-lightBlue' : ''
 					}`}
 				>
