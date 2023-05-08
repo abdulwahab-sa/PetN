@@ -16,6 +16,7 @@ export default {
 			textColor: {
 				darkGrey: '#272D37',
 				lightGrey: '#5F6D7E',
+				darkBlue: '#0054B4',
 			},
 		},
 		plugins: [],
