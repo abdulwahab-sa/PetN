@@ -11,6 +11,7 @@ export default {
 				hero: '#DF9C86',
 				darkBlue: '#0054B4',
 				lightBlue: '#437EF7',
+				camColor: '#3C50E0',
 			},
 			textColor: {
 				darkGrey: '#272D37',

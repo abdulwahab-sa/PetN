@@ -21,7 +21,7 @@ const footerLinks = [
 
 const Footer = () => {
 	return (
-		<div className="w-full h-nav bg-darkBlue px-28  overflow-hidden">
+		<div className="w-full h-nav bg-darkBlue px-28  overflow-hidden ">
 			<div className=" h-full flex items-end justify-between ">
 				<div className="flex space-x-8">
 					<div className="h-36 ">
