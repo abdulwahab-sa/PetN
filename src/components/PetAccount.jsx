@@ -1,4 +1,5 @@
 import rockyImg from '../assets/rockyImg.png';
+import camIcon from '../assets/camIcon.png';
 
 const inputs = [
 	{
@@ -42,7 +43,15 @@ const PetAccount = () => {
 	return (
 		<div className="py-40 px-14 ">
 			<div className="relative w-full mx-auto pet-form-wrapper flex items-center justify-center">
-				<img src={rockyImg} alt="" className="w-44 h-44 rounded-full absolute -top-20  z-30" />
+				<div className=" absolute -top-20  z-20">
+					<div className="relative">
+						<img src={rockyImg} alt="" className="w-44 h-44 rounded-full" />
+						<div className="absolute bottom-4 right-5 bg-camColor w-8 h-8 flex items-center justify-center rounded-full ">
+							<img src={camIcon} alt="" className="w-4" />
+						</div>
+					</div>
+				</div>
+
 				<div className="flex flex-wrap item-center justify-center">
 					{inputs.map((el) => (
 						<div
