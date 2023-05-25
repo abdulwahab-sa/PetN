@@ -9,12 +9,9 @@ const footerLinks = [
 		id: 2,
 		title: 'About',
 	},
+
 	{
 		id: 3,
-		title: 'Contact',
-	},
-	{
-		id: 4,
 		title: 'Log In',
 	},
 ];

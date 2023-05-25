@@ -9,8 +9,7 @@ const Account = () => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	return (
 		<div className="flex">
-			<Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
-			<PetAccount openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+			<MyPets />
 		</div>
 	);
 };

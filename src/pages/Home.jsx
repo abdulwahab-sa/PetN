@@ -8,9 +8,8 @@ import Login from './Login';
 const Home = () => {
 	return (
 		<>
-			<Navigation />
-			<Login />
-			<Footer />
+			<HeroSection />
+			<HomeAbout />
 		</>
 	);
 };

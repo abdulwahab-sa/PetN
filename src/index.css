@@ -76,6 +76,13 @@ body {
 }
 
 
+.reminder-form-wrapper-md{
+  height: 100%;
+  width: 100%;
+}
+
+
+
 .pet-form-input{
   border: 1px solid #DAE0E6;
 
