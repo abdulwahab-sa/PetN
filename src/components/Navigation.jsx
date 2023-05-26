@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import { MdNotes, MdDehaze } from 'react-icons/md';
 import logo from './../assets/PawTech.png';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 
 const navLinks = [
 	{
@@ -14,15 +15,29 @@ const navLinks = [
 		title: 'About',
 		path: '/about',
 	},
-	{
-		id: 3,
-		title: 'Log In',
-		path: '/login',
-	},
 ];
 
 const Navigation = () => {
+	const user = localStorage.getItem('user');
+
+	const [loggedIn, setLoggedIn] = useState([navLinks]);
+	const navigate = useNavigate();
+	if (!user) {
+		loggedIn.push({
+			id: 3,
+			title: 'Log In',
+			path: '/login',
+		});
+	}
+
 	const [mobileToggle, setMobileToggle] = useState(false);
+
+	const handleLogout = () => {
+		localStorage.removeItem('user');
+
+		navigate('login');
+	};
+
 	return (
 		<div className="w-full lg:h-nav h-40 bg-darkBlue lg:px-24 px-8 flex justify-between overflow-hidden">
 			<div className="flex items-end">
@@ -46,9 +61,24 @@ const Navigation = () => {
 						{Link.title}
 					</NavLink>
 				))}
-				<Link to="/signup">
-					<button className="bg-lightBlue p-2 lg:p-0  lg:w-28 lg:h-11 rounded-md lg:text-xl font-semibold text-white">Sign up</button>
-				</Link>
+				{!user && (
+					<>
+						<Link to="/login">
+							<button className="p-2 lg:p-0  lg:h-11 rounded-md lg:text-xl font-semibold text-white">Log In</button>
+						</Link>
+						<Link to="/signup">
+							<button className="bg-lightBlue p-2 lg:p-0  lg:w-28 lg:h-11 rounded-md lg:text-xl font-semibold text-white">Sign up</button>
+						</Link>
+					</>
+				)}
+				{user && (
+					<button
+						onClick={handleLogout}
+						className="bg-orange-500 p-2 lg:p-0  lg:w-28 lg:h-11 rounded-md lg:text-xl font-semibold text-white"
+					>
+						Log Out
+					</button>
+				)}
 			</div>
 		</div>
 	);

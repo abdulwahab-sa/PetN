@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { createContext, useReducer, useEffect, useContext } from 'react';
 
@@ -20,7 +21,7 @@ export const AuthContextProvider = ({ children }) => {
 	});
 
 	useEffect(() => {
-		const user = JSON.parse(localStorage.getItem('user'));
+		const user = localStorage.getItem('user');
 		if (user) {
 			dispatch({ type: 'LOGIN', payload: user });
 		}

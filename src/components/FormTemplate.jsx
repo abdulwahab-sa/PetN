@@ -22,7 +22,6 @@ const FormTemplate = ({ actionType, actionHandler }) => {
 	const onSubmit = (data) => {
 		const { email, password } = data;
 		actionHandler(email, password);
-		console.log(data);
 	};
 
 	return (

@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSidebar } from '../context/SidebarContext';
+import axios from 'axios';
 
 const inputs = [
 	{
@@ -43,7 +44,23 @@ const NewReminder = () => {
 		resolver: yupResolver(schema),
 	});
 
-	const onSubmit = (data) => console.log(data);
+	const onSubmit = async (data) => {
+		const token = localStorage.getItem('user');
+
+		try {
+			const response = await axios.post('http://localhost:3000/api/createreminder', data, {
+				headers: {
+					Authorization: token,
+				},
+			});
+
+			// Handle the response as needed
+			console.log(response.data);
+		} catch (error) {
+			// Handle the error
+			console.error(error);
+		}
+	};
 
 	return (
 		<div className="lg:py-32 py-8 px-4 lg:px-14 flex flex-col space-y-10 w-full h-full">
