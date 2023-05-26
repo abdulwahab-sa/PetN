@@ -6,7 +6,7 @@ const SignUp = () => {
 	const navigate = useNavigate();
 
 	const register = async (email, password) => {
-		const response = await axios.post('https://pawtech-api.herokuapp.com/api/register', { email, password });
+		const response = await axios.post('http://localhost:3000/api/register', { email, password });
 		const data = response.data.accessToken;
 		console.log(data);
 		if (!data) {

@@ -7,7 +7,7 @@ const Login = () => {
 	const { dispatch } = useAuthContext();
 	const navigate = useNavigate();
 	const login = async (email, password) => {
-		const response = await axios.post('https://pawtech-api.herokuapp.com/api/login', { email, password });
+		const response = await axios.post('http://localhost:3000/api/login', { email, password });
 		const data = response.data.accessToken;
 		console.log(data);
 		if (!data) {

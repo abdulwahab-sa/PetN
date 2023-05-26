@@ -84,7 +84,7 @@ const PetAccount = () => {
 		const token = localStorage.getItem('user');
 
 		try {
-			const response = await axios.post('https://pawtech-api.herokuapp.com/api/createpet', data, {
+			const response = await axios.post('http://localhost:3000/api/createpet', data, {
 				headers: {
 					Authorization: token,
 				},

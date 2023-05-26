@@ -10,7 +10,7 @@ const MyPets = () => {
 
 	const [pets, setPets] = useState([]);
 
-	const apiEndpoint = 'https://pawtech-api.herokuapp.com/api/getpets';
+	const apiEndpoint = 'http://localhost:3000/api/getpets';
 	const token = localStorage.getItem('user');
 
 	useEffect(() => {
@@ -28,7 +28,7 @@ const MyPets = () => {
 			});
 	}, [token]);
 
-	const endpoint = 'https://pawtech-api.herokuapp.com/api/deletepet/';
+	const endpoint = 'http://localhost:3000/api/deletepet/';
 
 	const handleDelete = (id) => {
 		setPets(pets.filter((pet) => pet.pet_id !== id));
