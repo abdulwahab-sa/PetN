@@ -6,7 +6,6 @@ import * as yup from 'yup';
 import dogIcon from '../assets/dogPlaceholder.png';
 import camIcon from '../assets/camIcon.png';
 import axios from 'axios';
-import { Buffer } from 'buffer';
 import { useSidebar } from '../context/SidebarContext';
 
 const inputs = [
@@ -85,7 +84,7 @@ const PetAccount = () => {
 		const token = localStorage.getItem('user');
 
 		try {
-			const response = await axios.post('http://localhost:3000/api/createpet', data, {
+			const response = await axios.post('https://pawtech-api.herokuapp.com/api/createpet', data, {
 				headers: {
 					Authorization: token,
 				},

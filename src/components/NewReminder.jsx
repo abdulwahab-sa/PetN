@@ -48,7 +48,7 @@ const NewReminder = () => {
 		const token = localStorage.getItem('user');
 
 		try {
-			const response = await axios.post('http://localhost:3000/api/createreminder', data, {
+			const response = await axios.post('https://pawtech-api.herokuapp.com/api/createreminder', data, {
 				headers: {
 					Authorization: token,
 				},
