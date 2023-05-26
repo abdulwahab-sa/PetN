@@ -33,7 +33,7 @@ const MyReminders = () => {
 	const { openSidebar, setOpenSidebar } = useSidebar();
 	const [reminders, setReminders] = useState([]);
 
-	const apiEndpoint = 'http://localhost:3000/api/getreminders';
+	const apiEndpoint = 'https://pawtech-api.herokuapp.com/api/getreminders';
 	const token = localStorage.getItem('user');
 
 	useEffect(() => {
