@@ -48,12 +48,15 @@ const MyPets = () => {
 	};
 
 	return (
-		<div className="h-full w-full md:py-28 md:px-24 py-12 px-5 ">
+		<div className="h-full w-full md:py-28 md:px-24 py-12 px-5 flex flex-col">
+			<button
+				onClick={() => setOpenSidebar(!openSidebar)}
+				className="lg:hidden mb-12 w-20 mx-auto bg-lightBlue p-2 rounded-md  font-semibold text-white"
+			>
+				Menu
+			</button>
 			<div className="flex justify-between">
 				<h2 className="font-bold text-darkGrey md:text-5xl text-3xl">My Pets</h2>
-				<button onClick={() => setOpenSidebar(!openSidebar)} className="lg:hidden bg-lightBlue p-3  rounded-md  font-semibold text-white">
-					Menu
-				</button>
 			</div>
 
 			<div className="flex flex-col space-y-8 mt-12">

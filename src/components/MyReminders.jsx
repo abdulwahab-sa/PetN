@@ -69,10 +69,10 @@ const MyReminders = () => {
 	};
 
 	return (
-		<div className="h-full w-full lg:py-28 lg:px-24 py-12 px-5 ">
+		<div className="h-full w-full lg:py-28 lg:px-24 py-12 px-5 flex flex-col">
 			<button
 				onClick={() => setOpenSidebar(!openSidebar)}
-				className="lg:hidden bg-lightBlue p-3  rounded-md  font-semibold text-white mb-6"
+				className="lg:hidden mb-12 w-20 mx-auto bg-lightBlue p-2 rounded-md  font-semibold text-white"
 			>
 				Menu
 			</button>

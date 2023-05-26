@@ -7,6 +7,7 @@ import dogIcon from '../assets/dogPlaceholder.png';
 import camIcon from '../assets/camIcon.png';
 import axios from 'axios';
 import { Buffer } from 'buffer';
+import { useSidebar } from '../context/SidebarContext';
 
 const inputs = [
 	{
@@ -53,7 +54,9 @@ const inputs = [
 	},
 ];
 
-const PetAccount = ({ openSidebar, setOpenSidebar }) => {
+const PetAccount = () => {
+	const { openSidebar, setOpenSidebar } = useSidebar();
+
 	// React Hook form in combination with Yup for validation schema
 
 	const [selectedImage, setSelectedImage] = useState(null);

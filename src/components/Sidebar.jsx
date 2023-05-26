@@ -47,10 +47,16 @@ const Sidebar = () => {
 				{<MdCancelPresentation />}
 			</span>
 			{navLinks.map((link) => (
-				<NavLink key={link.id} to={link.path} className={({ isActive }) => (isActive ? 'bg-lightBlue' : '')}>
+				<NavLink
+					key={link.id}
+					to={link.path}
+					onClick={() => setOpenSidebar(!openSidebar)}
+					className={({ isActive }) => (isActive ? 'bg-lightBlue' : '')}
+				>
 					<div className="cursor-pointer relative flex items-center space-x-4 px-10 lg:px-3 h-9 w-60 lg:w-60  rounded ">
 						<img src={link.icon} alt="" className="w-4" />
 						<span className="text-base font-medium text-white  flex items-center">{link.title}</span>
+						{/*
 						<span
 							className={`${
 								link.title === 'Reminders' ? 'flex' : 'hidden'
@@ -58,6 +64,7 @@ const Sidebar = () => {
 						>
 							5
 						</span>
+*/}
 					</div>
 				</NavLink>
 			))}

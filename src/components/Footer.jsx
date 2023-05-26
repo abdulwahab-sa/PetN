@@ -1,18 +1,22 @@
 import logo from './../assets/PawTech.png';
+import { NavLink } from 'react-router-dom';
 
 const footerLinks = [
 	{
 		id: 1,
 		title: 'Home',
+		path: '/',
 	},
 	{
 		id: 2,
 		title: 'About',
+		path: 'about',
 	},
 
 	{
 		id: 3,
 		title: 'Log In',
+		path: 'login',
 	},
 ];
 
@@ -31,9 +35,9 @@ const Footer = () => {
 				<div className="h-36 md:h-full mt-8 md:mt-0 flex justify-center space-y-5 text-white flex-col md:w-72 w-full">
 					<div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-7">
 						{footerLinks.map((Link) => (
-							<span key={Link.id} className="text-base font-medium">
+							<NavLink to={Link.path} key={Link.id} className="text-base font-medium">
 								{Link.title}
-							</span>
+							</NavLink>
 						))}
 					</div>
 

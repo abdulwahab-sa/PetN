@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { MdNotes, MdDehaze } from 'react-icons/md';
 import logo from './../assets/PawTech.png';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../context/AuthContext';
 
 const navLinks = [
 	{
@@ -19,23 +20,16 @@ const navLinks = [
 
 const Navigation = () => {
 	const user = localStorage.getItem('user');
-
+	const { dispatch } = useAuthContext();
 	const [loggedIn, setLoggedIn] = useState([navLinks]);
 	const navigate = useNavigate();
-	if (!user) {
-		loggedIn.push({
-			id: 3,
-			title: 'Log In',
-			path: '/login',
-		});
-	}
 
 	const [mobileToggle, setMobileToggle] = useState(false);
 
 	const handleLogout = () => {
 		localStorage.removeItem('user');
-
-		navigate('login');
+		dispatch({ type: 'LOGOUT' });
+		navigate('/');
 	};
 
 	return (
@@ -72,12 +66,17 @@ const Navigation = () => {
 					</>
 				)}
 				{user && (
-					<button
-						onClick={handleLogout}
-						className="bg-orange-500 p-2 lg:p-0  lg:w-28 lg:h-11 rounded-md lg:text-xl font-semibold text-white"
-					>
-						Log Out
-					</button>
+					<>
+						<NavLink to="/mypets" className=" text-white">
+							My Account
+						</NavLink>
+						<button
+							onClick={handleLogout}
+							className="bg-orange-500 p-2 lg:p-0  lg:w-28 lg:h-11 rounded-md lg:text-xl font-semibold text-white"
+						>
+							Log Out
+						</button>
+					</>
 				)}
 			</div>
 		</div>
