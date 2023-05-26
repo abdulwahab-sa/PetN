@@ -4,20 +4,16 @@ const ideas = [
 	{
 		id: 1,
 		icon: placeholderIcon,
-		title: 'Explore ideas together',
-		statement: 'Engage audience segments and finally create actionable insights. Amplify vertical integration.',
+		title: 'Ensure your pets safety',
+		statement:
+			'Pet owners can easily keep track of their furry companions and quickly locate them if they go missing or wander off. This feature provides peace of mind and helps prevent pets from getting lost or running astray.',
 	},
 	{
 		id: 2,
 		icon: placeholderIcon,
-		title: 'Explore ideas together',
-		statement: 'Engage audience segments and finally create actionable insights. Amplify vertical integration.',
-	},
-	{
-		id: 3,
-		icon: placeholderIcon,
-		title: 'Explore ideas together',
-		statement: 'Engage audience segments and finally create actionable insights. Amplify vertical integration.',
+		title: 'Overall Wellness of Pets',
+		statement:
+			'Set reminders for important events such as vet visits and vaccination appointments,ensuring that their pets receive timely healthcare.',
 	},
 ];
 
@@ -27,7 +23,8 @@ const HomeAbout = () => {
 			<div className="flex flex-col md:space-y-6">
 				<h2 className="text-3xl md:text-5xl font-bold text-darkGrey">How Paw Tech Works</h2>
 				<p className="md:aboutpara my-2 md:my-0 text-lightGrey text-base font-normal">
-					Whether it’s a sneaky escape or a stroll with your dogwalker, you can now track your pet at any given time to ease your mind.{' '}
+					Paw Tech is a wearable microchip for pets, its a tiny, high-tech device that can be easily attached to a pets collar providing
+					tracking and monitoring of their location and health.
 				</p>
 			</div>
 			<div className="flex flex-col space-y-10">
