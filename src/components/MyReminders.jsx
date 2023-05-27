@@ -33,7 +33,7 @@ const MyReminders = () => {
 	const { openSidebar, setOpenSidebar } = useSidebar();
 	const [reminders, setReminders] = useState([]);
 
-	const apiEndpoint = 'http://localhost:3000/api/getreminders';
+	const apiEndpoint = 'https://pawtech-api.herokuapp.com/api/getreminders';
 	const token = localStorage.getItem('user');
 
 	useEffect(() => {
@@ -51,7 +51,7 @@ const MyReminders = () => {
 			});
 	}, [token]);
 
-	const endpoint = 'http://localhost:3000/api/deletereminder/';
+	const endpoint = 'https://pawtech-api.herokuapp.com/api/deletereminder';
 	const handleDelete = (id) => {
 		setReminders(reminders.filter((rem) => rem.rem_id !== id));
 		axios
