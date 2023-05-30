@@ -51,7 +51,7 @@ const MyReminders = () => {
 			});
 	}, [token]);
 
-	const endpoint = 'https://pawtech-api.herokuapp.com/api/deletereminder';
+	const endpoint = 'https://pawtech-api.herokuapp.com/api/deletereminder/';
 	const handleDelete = (id) => {
 		setReminders(reminders.filter((rem) => rem.rem_id !== id));
 		axios
