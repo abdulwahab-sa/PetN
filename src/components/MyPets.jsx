@@ -28,7 +28,7 @@ const MyPets = () => {
 			});
 	}, [token]);
 
-	const endpoint = 'https://pawtech-api.herokuapp.com/api/deletepet';
+	const endpoint = 'https://pawtech-api.herokuapp.com/api/deletepet/';
 
 	const handleDelete = (id) => {
 		setPets(pets.filter((pet) => pet.pet_id !== id));
