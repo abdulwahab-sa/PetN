@@ -4,6 +4,7 @@ import { Image } from 'cloudinary-react';
 import deleteIcon from '../assets/delete.png';
 import { useSidebar } from '../context/SidebarContext';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const MyPets = () => {
 	const { openSidebar, setOpenSidebar } = useSidebar();
@@ -69,7 +70,9 @@ const MyPets = () => {
 							className="relative lg:pet-wrapper pet-wrapper-border h-full w-full flex flex-col lg:flex-row lg:items-center justify-center px-4 py-4 lg:py-0 lg:justify-start lg:space-x-4"
 						>
 							<div className="relative">
-								<Image cloudName="dixpklhom" publicId={pet.petImg} className="lg:w-28 lg:h-28 h-24 w-24 rounded-full" />
+								<Link to={`/viewpet/${pet.pet_id}`}>
+									<Image cloudName="dixpklhom" publicId={pet.petImg} className="lg:w-28 lg:h-28 h-24 w-24 rounded-full" />
+								</Link>
 							</div>
 							<div className="flex flex-col ">
 								<h3 className="text-xl font-bold text-darkGrey mb-1">{pet.petName}</h3>

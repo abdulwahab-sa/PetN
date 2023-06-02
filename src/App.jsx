@@ -7,10 +7,12 @@ import { Suspense } from 'react';
 import RootLayout from './layout/RootLayout';
 import AccountLayout from './layout/AccountLayout';
 import MyPets from './components/MyPets';
-import PetAccount from './components/PetAccount';
+
 import MyReminders from './components/MyReminders';
 import NewReminder from './components/NewReminder';
+import ViewPet from './components/ViewPet';
 import { lazy } from 'react';
+import AddPet from './components/AddPet';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -49,7 +51,15 @@ function App() {
 									path="petaccount"
 									element={
 										<PrivateRoute>
-											<PetAccount />
+											<AddPet />
+										</PrivateRoute>
+									}
+								/>
+								<Route
+									path="viewpet/:id"
+									element={
+										<PrivateRoute>
+											<ViewPet />
 										</PrivateRoute>
 									}
 								/>

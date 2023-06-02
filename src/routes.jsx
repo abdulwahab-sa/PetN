@@ -10,6 +10,7 @@ import MyReminders from './components/MyReminders';
 import NewReminder from './components/NewReminder';
 import { lazy } from 'react';
 import { useAuthContext } from './context/AuthContext';
+import AddPet from './components/AddPet';
 const user = localStorage.getItem('user');
 
 const Home = lazy(() => import('./pages/Home'));
@@ -78,6 +79,14 @@ const router = createBrowserRouter(
 					element={
 						<ProtectedRoute>
 							<MyReminders />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path="addpet"
+					element={
+						<ProtectedRoute>
+							<AddPet />
 						</ProtectedRoute>
 					}
 				/>
