@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { MdNotes, MdDehaze } from 'react-icons/md';
 import logo from './../assets/PawTech.png';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeCredentials } from '../slices/authSlice';
 
 const navLinks = [
 	{
@@ -20,16 +21,16 @@ const navLinks = [
 
 const Navigation = () => {
 	const user = localStorage.getItem('user');
-	const { dispatch } = useAuthContext();
 	const [loggedIn, setLoggedIn] = useState([navLinks]);
 	const navigate = useNavigate();
 
+	const dispatch = useDispatch();
+	const { userInfo } = useSelector((state) => state.auth);
 	const [mobileToggle, setMobileToggle] = useState(false);
 
 	const handleLogout = () => {
-		localStorage.removeItem('user');
-		dispatch({ type: 'LOGOUT' });
-		navigate('/');
+		dispatch(removeCredentials());
+		navigate('/login');
 	};
 
 	return (
@@ -55,7 +56,7 @@ const Navigation = () => {
 						{Link.title}
 					</NavLink>
 				))}
-				{!user && (
+				{!userInfo && (
 					<>
 						<Link to="/login">
 							<button className="p-2 lg:p-0  lg:h-11 rounded-md lg:text-xl font-semibold text-white">Log In</button>
@@ -65,10 +66,10 @@ const Navigation = () => {
 						</Link>
 					</>
 				)}
-				{user && (
+				{userInfo && (
 					<>
 						<NavLink to="/mypets" className=" text-white">
-							My Account
+							Dashboard
 						</NavLink>
 						<button
 							onClick={handleLogout}

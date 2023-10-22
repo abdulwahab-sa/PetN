@@ -2,7 +2,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SidebarProvider } from './context/SidebarContext';
-import { AuthContextProvider, useAuthContext } from './context/AuthContext';
 import { Suspense } from 'react';
 import RootLayout from './layout/RootLayout';
 import AccountLayout from './layout/AccountLayout';
@@ -13,6 +12,7 @@ import NewReminder from './components/NewReminder';
 import ViewPet from './components/ViewPet';
 import { lazy } from 'react';
 import AddPet from './components/AddPet';
+import { useSelector } from 'react-redux';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -22,76 +22,46 @@ const SignUp = lazy(() => import('./pages/SignUp'));
 function App() {
 	return (
 		<BrowserRouter>
-			<AuthContextProvider>
-				<SidebarProvider>
-					<Suspense
-						fallback={
-							<div id="loading">
-								<div className="loader"></div>
-							</div>
-						}
-					>
-						<Routes>
-							<Route path="/" element={<RootLayout />}>
-								<Route path="/" element={<Home />} />
-								<Route path="about" element={<About />} />
-								<Route path="login" element={<Login />} />
-								<Route path="signup" element={<SignUp />} />
-							</Route>
-							<Route path="/" element={<AccountLayout />}>
-								<Route
-									path="mypets"
-									element={
-										<PrivateRoute>
-											<MyPets />
-										</PrivateRoute>
-									}
-								/>
-								<Route
-									path="petaccount"
-									element={
-										<PrivateRoute>
-											<AddPet />
-										</PrivateRoute>
-									}
-								/>
-								<Route
-									path="viewpet/:id"
-									element={
-										<PrivateRoute>
-											<ViewPet />
-										</PrivateRoute>
-									}
-								/>
-								<Route
-									path="myreminders"
-									element={
-										<PrivateRoute>
-											<MyReminders />
-										</PrivateRoute>
-									}
-								/>
-								<Route
-									path="newreminder"
-									element={
-										<PrivateRoute>
-											<NewReminder />
-										</PrivateRoute>
-									}
-								/>
-							</Route>
-						</Routes>
-					</Suspense>
-				</SidebarProvider>
-			</AuthContextProvider>
+			<SidebarProvider>
+				<Suspense
+					fallback={
+						<div id="loading">
+							<div className="loader"></div>
+						</div>
+					}
+				>
+					<Routes>
+						<Route path="/" element={<RootLayout />}>
+							<Route path="/" element={<Home />} />
+							<Route path="about" element={<About />} />
+							<Route path="login" element={<Login />} />
+							<Route path="signup" element={<SignUp />} />
+						</Route>
+						<Route
+							path="/"
+							element={
+								<PrivateRoute>
+									<AccountLayout />
+								</PrivateRoute>
+							}
+						>
+							<Route path="mypets" element={<MyPets />} />
+							<Route path="petaccount" element={<AddPet />} />
+							<Route path="viewpet/:id" element={<ViewPet />} />
+							<Route path="myreminders" element={<MyReminders />} />
+							<Route path="newreminder" element={<NewReminder />} />
+						</Route>
+					</Routes>
+				</Suspense>
+			</SidebarProvider>
 		</BrowserRouter>
 	);
 }
 
 const PrivateRoute = ({ children }) => {
-	const { user } = useAuthContext();
+	const { userInfo } = useSelector((state) => state.auth);
 
-	return user ? children : <Navigate to="/login" />;
+	return userInfo ? children : <Navigate to="/login" replace />;
 };
 
 export default App;

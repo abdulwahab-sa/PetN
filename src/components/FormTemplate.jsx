@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import graphic from './../assets/graphic.png';
 import catPic from './../assets/catPic.png';
 
-const FormTemplate = ({ actionType, actionHandler }) => {
+const FormTemplate = ({ actionType, actionHandler, isLoading }) => {
 	const schema = yup.object().shape({
 		email: yup.string().email().required(),
 		password: yup.string().required(),
@@ -54,8 +54,10 @@ const FormTemplate = ({ actionType, actionHandler }) => {
 				{actionType === 'login' && <span className="text-right text-darkBlue font-semibold max-w-sm"> Forget password? </span>}
 				<input
 					type="submit"
-					value={actionType === 'login' ? 'Log In' : 'Sign Up'}
-					className="cursor-pointer bg-darkBlue block h-11 max-w-sm rounded-md font-semibold text-white"
+					value={actionType === 'login' ? 'Log In' : isLoading ? 'Loading...' : 'Sign Up'}
+					className={`cursor-pointer  ${
+						isLoading ? 'bg-lightBlue' : 'bg-darkBlue'
+					}  block h-11 max-w-sm rounded-md font-semibold text-white`}
 				/>
 			</form>
 

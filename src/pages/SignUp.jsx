@@ -1,24 +1,28 @@
 import { useNavigate } from 'react-router-dom';
 import FormTemplate from '../components/FormTemplate';
-import axios from 'axios';
+import { useRegisterMutation } from '../slices/userApiSlice';
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
 	const navigate = useNavigate();
 
-	const register = async (email, password) => {
-		const response = await axios.post('https://pawtech-api.herokuapp.com/api/register', { email, password });
-		const data = response.data.accessToken;
-		console.log(data);
-		if (!data) {
-			console.log('No data');
-		}
-		if (data) {
-			console.log('user added');
-			navigate('/login');
+	const [register, { isLoading }] = useRegisterMutation();
+
+	const registerHandler = async (email, password) => {
+		try {
+			const response = await register({ email, password });
+
+			if (response.data) {
+				toast.success('Registration successful');
+				navigate('/login');
+			}
+		} catch (error) {
+			toast.error('Invalid email or password');
+			console.error(error);
 		}
 	};
 
-	return <FormTemplate actionType={'signup'} actionHandler={register} />;
+	return <FormTemplate actionType={'signup'} actionHandler={registerHandler} isLoading={isLoading} />;
 };
 
 export default SignUp;

@@ -10,7 +10,7 @@ import { useSidebar } from '../context/SidebarContext';
 const navLinks = [
 	{
 		id: 1,
-		title: 'My Account',
+		title: 'Pet Account',
 		icon: userIcon,
 		path: 'petaccount',
 	},
@@ -26,12 +26,6 @@ const navLinks = [
 		icon: messageIcon,
 		path: 'myreminders',
 	},
-	{
-		id: 4,
-		title: 'Settings',
-		icon: settingIcon,
-		path: 'settings',
-	},
 ];
 
 const Sidebar = () => {
@@ -41,7 +35,7 @@ const Sidebar = () => {
 		<div
 			className={`absolute ${
 				openSidebar ? 'left-0' : '-left-full'
-			}  top-40 h-64 w-full justify-center lg:justify-normal lg:sidebar bg-darkBlue shadow-xl lg:shadow-none p-4 lg:p-28 flex flex-col items-center space-y-4 lg:space-y-2 z-50 lg:static  transition-all`}
+			}  top-40  w-full justify-center lg:justify-normal lg:sidebar bg-darkBlue shadow-xl lg:shadow-none p-4 lg:p-28 flex flex-col items-center space-y-4 lg:space-y-2 z-50 lg:static  transition-all`}
 		>
 			<span onClick={() => setOpenSidebar(!openSidebar)} className="lg:hidden text-white text-3xl absolute right-4 top-0">
 				{<MdCancelPresentation />}

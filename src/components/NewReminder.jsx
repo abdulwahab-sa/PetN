@@ -2,25 +2,20 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSidebar } from '../context/SidebarContext';
-import axios from 'axios';
+import { useGetAllPetsQuery, useCreateReminderMutation } from '../slices/petApiSlice';
+import toast from 'react-hot-toast';
 
 const inputs = [
 	{
-		id: 1,
-		title: 'Name of Pet',
-		value: 'petName',
-		type: 'text',
-	},
-	{
 		id: 2,
 		title: 'Date of Reminder',
-		value: 'dateOfReminder',
+		value: 'reminderDate',
 		type: 'date',
 	},
 	{
 		id: 3,
 		title: 'Note',
-		value: 'note',
+		value: 'reminderNote',
 		type: 'text',
 	},
 ];
@@ -28,37 +23,47 @@ const inputs = [
 const NewReminder = () => {
 	const { openSidebar, setOpenSidebar } = useSidebar();
 
+	const { data: petsData } = useGetAllPetsQuery();
+
+	const [createReminder, { isLoading }] = useCreateReminderMutation();
+
 	// React Hook form in combination with Yup for validation schema
 
 	const schema = yup.object().shape({
-		petName: yup.string().required(),
-		dateOfReminder: yup.string().required(),
-		note: yup.string().required(),
+		petId: yup.number().required().integer(),
+		reminderDate: yup.string().required(),
+		reminderNote: yup.string().required(),
 	});
 
 	const {
 		register,
 		handleSubmit,
+		setValue,
 		formState: { errors },
 	} = useForm({
 		resolver: yupResolver(schema),
 	});
 
 	const onSubmit = async (data) => {
-		const token = localStorage.getItem('user');
+		//const token = localStorage.getItem('user');
 
 		try {
-			const response = await axios.post('https://pawtech-api.herokuapp.com/api/createreminder', data, {
-				headers: {
-					Authorization: token,
-				},
-			});
+			const response = await createReminder(data);
+			console.log(response);
 
-			// Handle the response as needed
-			console.log(response.data);
+			if (response.data.reminder) {
+				toast.success('Reminder Created Successfully');
+
+				// reset the form
+
+				setValue('petId', '');
+				setValue('reminderDate', '');
+				setValue('reminderNote', '');
+			}
 		} catch (error) {
 			// Handle the error
 			console.error(error);
+			toast.error('Something went wrong');
 		}
 	};
 
@@ -75,6 +80,23 @@ const NewReminder = () => {
 			<div className="py-8 md:pb-40 w-full mx-auto px-6  pet-form-wrapper md:reminder-form-wrapper-md ">
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<div className="flex flex-col md:mt-0 items-center justify-center">
+						<div className="flex flex-col w-full space-y-2 max-w-2xl m-2  ">
+							<span className="text-lg font-medium text-darkBlue">Pet Name</span>
+
+							<select
+								name=""
+								id=""
+								className={`w-full h-9 py-1 px-3 pet-form-input ${errors.petId ? 'border-red-500' : ''}`}
+								{...register('petId')}
+							>
+								<option value=""> Select Pet </option>
+								{petsData?.data.map((pet) => (
+									<option value={pet.id} key={pet.id}>
+										{pet.petName}
+									</option>
+								))}
+							</select>
+						</div>
 						{inputs.map((el) => (
 							<div className="flex flex-col w-full space-y-2 max-w-2xl m-2  " key={el.id}>
 								<span className="text-lg font-medium text-darkBlue">{el.title}</span>
@@ -86,9 +108,11 @@ const NewReminder = () => {
 							</div>
 						))}
 						<input
-							className="cursor-pointer mt-5 bg-darkBlue text-white py-2 px-3 pet-form-input w-4/5 max-w-2xl font-semibold"
+							className={`cursor-pointer mt-5 ${
+								isLoading ? 'bg-lightBlue' : 'bg-darkBlue'
+							}  text-white py-2 px-3 pet-form-input w-4/5 font-semibold`}
 							type="submit"
-							value="Save Reminder"
+							value={`${isLoading ? 'Saving Reminder...' : 'Save Reminder'}`}
 						/>
 					</div>
 				</form>

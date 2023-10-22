@@ -1,51 +1,40 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
 import { Image } from 'cloudinary-react';
 import deleteIcon from '../assets/delete.png';
 import { useSidebar } from '../context/SidebarContext';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useGetPetsQuery } from '../slices/petApiSlice';
+import { useDeletePetMutation } from '../slices/petApiSlice';
+import toast from 'react-hot-toast';
+import ReactPaginate from 'react-paginate';
+import { useState } from 'react';
 
 const MyPets = () => {
 	const { openSidebar, setOpenSidebar } = useSidebar();
 
-	const [pets, setPets] = useState([]);
+	const [page, setPage] = useState(1);
 
-	const apiEndpoint = 'https://pawtech-api.herokuapp.com/api/getpets';
-	const token = localStorage.getItem('user');
+	const { data, error, isLoading } = useGetPetsQuery(page);
 
-	useEffect(() => {
-		axios
-			.get(apiEndpoint, {
-				headers: {
-					Authorization: token,
-				},
-			})
-			.then((response) => {
-				setPets(response.data);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	}, [token]);
+	const [deletePet] = useDeletePetMutation();
 
-	const endpoint = 'https://pawtech-api.herokuapp.com/api/deletepet/';
+	const handleDelete = async (id) => {
+		try {
+			const response = await deletePet(id);
+			if (response.data.pet) {
+				toast.success('Pet Deleted Successfully');
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error('Something went wrong');
+		}
+	};
 
-	const handleDelete = (id) => {
-		setPets(pets.filter((pet) => pet.pet_id !== id));
+	const pageCount = Math.ceil(data?.count / 6);
 
-		axios
-			.delete(`${endpoint}${id}`, {
-				headers: {
-					Authorization: token,
-				},
-			})
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+	const HandlePageChange = (selectedPage) => {
+		const newPage = selectedPage.selected + 1;
+		setPage(newPage);
 	};
 
 	return (
@@ -61,34 +50,57 @@ const MyPets = () => {
 			</div>
 
 			<div className="flex flex-col space-y-8 mt-12">
-				{pets.length === 0 ? (
+				{isLoading ? (
+					<div id="loading flex items-center justify-center">
+						<div className="loader"></div>
+					</div>
+				) : error ? (
 					<span className="font-semibold text-gray-600 text-xl"> There are no pets to display! </span>
 				) : (
-					pets.map((pet) => (
+					data?.data?.map((pet) => (
 						<div
-							key={pet.pet_id}
+							key={pet.id}
 							className="relative lg:pet-wrapper pet-wrapper-border h-full w-full flex flex-col lg:flex-row lg:items-center justify-center px-4 py-4 lg:py-0 lg:justify-start lg:space-x-4"
 						>
 							<div className="relative">
-								<Link to={`/viewpet/${pet.pet_id}`}>
-									<Image cloudName="dixpklhom" publicId={pet.petImg} className="lg:w-28 lg:h-28 h-24 w-24 rounded-full" />
+								<Link to={`/viewpet/${pet.id}`}>
+									{<Image cloudName="dixpklhom" publicId={pet.petImg} className="lg:w-28 lg:h-28 h-24 w-24 rounded-full" />}
 								</Link>
 							</div>
 							<div className="flex flex-col ">
 								<h3 className="text-xl font-bold text-darkGrey mb-1">{pet.petName}</h3>
 								<span className="text-base font-normal text-lightGrey">{`Species: ${pet.species}`}</span>
 								<span className="text-base font-normal text-lightGrey">{`Breed: ${pet.breed}`}</span>
-								<span className="text-base font-normal text-lightGrey">{`Age: ${pet.birthDate}`}</span>
 							</div>
 							<button
 								className="absolute -top-5 -right-5 bg-primaryPurple p-2 h-8 w-8 rounded-full flex items-center justify-center"
-								onClick={() => handleDelete(pet.pet_id)}
+								onClick={() => handleDelete(pet.id)}
 							>
 								<img src={deleteIcon} alt="" className="w-3 h-3" />
 							</button>
 						</div>
 					))
 				)}
+
+				<div className="flex justify-center">
+					{data?.count > 6 && (
+						<ReactPaginate
+							pageCount={pageCount}
+							pageRangeDisplayed={2}
+							marginPagesDisplayed={1}
+							containerClassName="flex flex-row space-x-2"
+							previousLabel="Previous"
+							nextLabel="Next"
+							breakLabel="..."
+							onPageChange={HandlePageChange}
+							activeClassName="text-primaryPurple"
+							pageClassName="text-darkGrey"
+							breakClassName="text-darkGrey"
+							previousClassName="text-darkGrey"
+							nextClassName="text-darkGrey"
+						/>
+					)}
+				</div>
 			</div>
 		</div>
 	);

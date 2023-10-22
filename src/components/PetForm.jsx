@@ -10,6 +10,8 @@ import { useSidebar } from '../context/SidebarContext';
 import { useParams } from 'react-router';
 import Geolocator from './Geolocator';
 import { MdLocationOn } from 'react-icons/md';
+import { useCreatePetMutation, useUpdatePetMutation, useGetSinglePetQuery } from '../slices/petApiSlice';
+import toast from 'react-hot-toast';
 
 // Reusable Component for the Pet Form that is used for creating a new pet or viewing an existing pet
 // depending on the type prop passed to it
@@ -96,31 +98,24 @@ const PetForm = ({ type }) => {
 	// state for submit success
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 
+	// Rtk Mutation for creating a new pet
+	const [createPet, { isLoading: createPetLoading, error: createPetError, success: createPetSuccess }] = useCreatePetMutation();
+
+	// Rtk Mutation for updating an existing pet
+	const [updatePet, { isLoading: updateIsLoading, isSuccess: updateIsSuccess, isError: updateIsError, error: updateError }] =
+		useUpdatePetMutation();
+
+	const { data: singlePetData, isLoading: singlePetLoading, error: singlePetError } = useGetSinglePetQuery(id, { skip: !id });
+
 	// Get the pet data from the server if type is view and id is not null
 	useEffect(() => {
 		if (type === 'view' && id) {
-			// Fetch the pet data from the server
-
-			const fetchPetData = async () => {
-				const token = localStorage.getItem('user');
-				try {
-					const reqPet = await axios.get(`https://pawtech-api.herokuapp.com/api/getpet/${id}`, {
-						headers: {
-							Authorization: token,
-						},
-					});
-
-					setPetData(reqPet.data[0]);
-					//setValue('lastPinnedLocation', userLocation ? userLocation : petData?.lastPinnedLocation || '');
-				} catch (error) {
-					console.error(error);
-				}
-			};
-			fetchPetData();
+			setPetData(singlePetData?.data);
+			singlePetError && toast.error('Something went wrong!');
 		} else if (type === 'createNew') {
 			console.log('createNew');
 		}
-	}, [userLocation, petData, type, id]);
+	}, [singlePetData, type, id, singlePetError]);
 
 	// State for selected image and image preview in case of createNew
 	const [selectedImage, setSelectedImage] = useState(null);
@@ -161,7 +156,6 @@ const PetForm = ({ type }) => {
 			registration[input.value] = register(input.value);
 		});
 	} else if (type === 'view') {
-		// Create a registration object for only the lastPinnedLocation input
 		registration = {
 			lastPinnedLocation: register('lastPinnedLocation'),
 		};
@@ -181,10 +175,10 @@ const PetForm = ({ type }) => {
 		const file = e.target.files[0];
 		const formData = new FormData();
 		formData.append('file', file);
-		formData.append('upload_preset', 'wy679bdg');
+		formData.append('upload_preset', 'rm3fkp0y');
 
 		try {
-			const response = await axios.post('https://api.cloudinary.com/v1_1/dixpklhom/image/upload', formData);
+			const response = await axios.post('https://api.cloudinary.com/v1_1/dpw1bckje/image/upload', formData);
 			if (response) {
 				const imageUrl = response.data.secure_url;
 
@@ -192,7 +186,7 @@ const PetForm = ({ type }) => {
 				setSelectedImage(imageUrl);
 			}
 		} catch (error) {
-			console.error(error);
+			toast.error('Something went wrong!');
 		}
 	};
 
@@ -207,50 +201,43 @@ const PetForm = ({ type }) => {
 		const token = localStorage.getItem('user');
 		if (type === 'createNew') {
 			try {
-				const response = await axios.post('https://pawtech-api.herokuapp.com/api/createpet', data, {
-					headers: {
-						Authorization: token,
-					},
-				});
+				const response = await createPet(data);
 
 				// Handle the response as needed
 				console.log(response.data);
-				if (response.data.affectedRows === 1) {
-					setSubmitSuccess(true);
+
+				if (response.data.pet) {
+					toast.success('Pet created successfully!');
 				}
+
+				// Reset the form
+				setSelectedImage(null);
+				setValue('petName', '');
+				setValue('species', '');
+				setValue('breed', '');
+				setValue('birthDate', '');
+				setValue('color', '');
+				setValue('weight', '');
+				setValue('lastPinnedLocation', '');
+				setValue('petImg', '');
 			} catch (error) {
 				// Handle the error
-				console.error(error);
-				if (error.response.status === 401 || error.response.status === 403) {
-					localStorage.removeItem('user');
-					window.location.href = '/login';
-				}
+				toast.error('Something went wrong!');
 			}
 		} else if (type === 'view') {
-			console.log(data);
-
 			try {
-				const response = await axios.put(`https://pawtech-api.herokuapp.com/api/updatepet/${id}`, data, {
-					headers: {
-						Authorization: token,
-					},
-				});
+				const response = await updatePet(id, data);
 
-				// Handle the response as needed
-				if (response.data.affectedRows === 1) {
-					setSubmitSuccess(true);
+				if (response.data.pet) {
+					toast.success('Pet updated successfully!');
 				}
+
+				// Reload the page
+				//window.location.reload();
 			} catch (error) {
 				// Handle the error
 				console.error(error);
-				if (error.response.status === 401 || error.response.status === 403) {
-					localStorage.removeItem('user');
-					window.location.href = '/login';
-				} else if (error.response.status === 404) {
-					window.location.href = '/404';
-				} else if (error.response.status === 500) {
-					window.location.href = '/500';
-				}
+				toast.error('Something went wrong!');
 			}
 		}
 	};
@@ -292,8 +279,37 @@ const PetForm = ({ type }) => {
 					)}
 
 					<div className="flex flex-col mt-28 lg:mt-10 pb-3 lg:pb-0 md:flex-row flex-wrap item-center justify-center">
-						{inputs.map((el) => {
-							if (type === 'createNew') {
+						{singlePetLoading ? (
+							<div id="loading flex items-center justify-center">
+								<div className="loader"></div>
+							</div>
+						) : (
+							inputs.map((el) => {
+								if (type === 'createNew') {
+									return (
+										<div
+											className={`relative flex flex-col w-full lg:w-2/5 space-y-2 max-w-2xl m-2 ${
+												el.title === 'Last Pinned Location' ? 'lg:w-full' : 'lg:w-2/5'
+											}`}
+											key={el.id}
+										>
+											<span className="text-lg font-medium text-darkBlue">{el.title}</span>
+											<button
+												className={`${
+													el.title === 'Last Pinned Location' ? 'absolute' : 'hidden'
+												} top-0 -right-10 text-2xl text-darkBlue rounded-full flex justify-center items-center w-9 h-9 border-2 border-blue-500 hover:bg-lightBlue hover:text-white`}
+												onClick={handleLocationClick}
+											>
+												<MdLocationOn />
+											</button>
+											<input
+												type={el.type}
+												className={`w-full h-9 py-1 px-3 pet-form-input ${errors[el.value] ? 'border-red-500' : ''}`}
+												{...registration[el.value]}
+											/>
+										</div>
+									);
+								}
 								return (
 									<div
 										className={`relative flex flex-col w-full lg:w-2/5 space-y-2 max-w-2xl m-2 ${
@@ -314,44 +330,25 @@ const PetForm = ({ type }) => {
 											type={el.type}
 											className={`w-full h-9 py-1 px-3 pet-form-input ${errors[el.value] ? 'border-red-500' : ''}`}
 											{...registration[el.value]}
+											disabled={el.value !== 'lastPinnedLocation'}
+											placeholder={el.value !== 'lastPinnedLocation' ? petData && petData[el.value] : ''}
+											defaultValue={el.value !== 'lastPinnedLocation' ? null : petData && petData['lastPinnedLocation']}
 										/>
 									</div>
 								);
-							}
-							return (
-								<div
-									className={`relative flex flex-col w-full lg:w-2/5 space-y-2 max-w-2xl m-2 ${
-										el.title === 'Last Pinned Location' ? 'lg:w-full' : 'lg:w-2/5'
-									}`}
-									key={el.id}
-								>
-									<span className="text-lg font-medium text-darkBlue">{el.title}</span>
-									<button
-										className={`${
-											el.title === 'Last Pinned Location' ? 'absolute' : 'hidden'
-										} top-0 -right-10 text-2xl text-darkBlue rounded-full flex justify-center items-center w-9 h-9 border-2 border-blue-500 hover:bg-lightBlue hover:text-white`}
-										onClick={handleLocationClick}
-									>
-										<MdLocationOn />
-									</button>
-									<input
-										type={el.type}
-										className={`w-full h-9 py-1 px-3 pet-form-input ${errors[el.value] ? 'border-red-500' : ''}`}
-										{...registration[el.value]}
-										disabled={el.value !== 'lastPinnedLocation'}
-										placeholder={el.value !== 'lastPinnedLocation' ? petData && petData[el.value] : ''}
-										defaultValue={el.value !== 'lastPinnedLocation' ? null : petData && petData['lastPinnedLocation']}
-									/>
-								</div>
-							);
-						})}
-						<input
-							className="cursor-pointer mt-5 bg-darkBlue text-white py-2 px-3 pet-form-input w-4/5 font-semibold"
-							type="submit"
-							value="Save Pet"
-						/>
+							})
+						)}
+
+						{!singlePetLoading && (
+							<input
+								className={`cursor-pointer mt-5 ${
+									createPetLoading || updateIsLoading ? 'bg-lightBlue' : 'bg-darkBlue'
+								}  text-white py-2 px-3 pet-form-input w-4/5 font-semibold`}
+								type="submit"
+								value={`${createPetLoading || updateIsLoading ? 'Saving Pet...' : 'Save Pet'}`}
+							/>
+						)}
 					</div>
-					{submitSuccess && <span className="text-xl font-semibold text-green-600 mt-3">Submitted Successfully! </span>}
 				</div>
 			</form>
 		</div>

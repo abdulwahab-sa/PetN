@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Geolocator = () => {
 	const [latitude, setLatitude] = useState(null);
@@ -15,10 +16,12 @@ const Geolocator = () => {
 				},
 				(error) => {
 					console.error(error);
+					toast.error('Something went wrong');
 				}
 			);
 		} else {
 			console.error('Geolocation is not supported by this browser.');
+			toast.error('Geolocation is not supported by this browser.');
 		}
 	}, []);
 
