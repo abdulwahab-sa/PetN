@@ -1,5 +1,6 @@
 import graphic from './../assets/graphic.png';
 import dogPic from './../assets/dogPic.png';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
 	return (
@@ -10,7 +11,9 @@ const HeroSection = () => {
 					{' '}
 					Discover smart ways that tell you how to help them stay healthy, happy, and safe
 				</p>
-				<button className="bg-darkBlue inline-block h-11 w-32 rounded-md font-semibold text-white">Get Started</button>
+				<Link to="/signup">
+					<button className="bg-darkBlue inline-block h-11 w-32 rounded-md font-semibold text-white">Get Started</button>
+				</Link>
 			</div>
 			<div className="relative md:w-1/2 w-full ">
 				<img src={graphic} alt="" className="hidden md:flex graphic absolute md:top-10 md:left-10" />
