@@ -175,7 +175,7 @@ const PetForm = ({ type }) => {
 		const file = e.target.files[0];
 		const formData = new FormData();
 		formData.append('file', file);
-		formData.append('upload_preset', 'rm3fkp0y');
+		formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_PRESET);
 
 		try {
 			const response = await axios.post('https://api.cloudinary.com/v1_1/dpw1bckje/image/upload', formData);

@@ -26,7 +26,7 @@ const Geolocator = () => {
 	}, []);
 
 	const getLocationName = (latitude, longitude) => {
-		const API_KEY = 'AIzaSyBqPNqjYMgwrUq3FWqrIbN5XuXscY-HjMQ';
+		const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 		const geocodeApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`;
 
 		axios
